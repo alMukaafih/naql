@@ -1,0 +1,14 @@
+[package]
+edition = "2024"
+name    = "naql-shared"
+version = "0.1.0"
+
+[dependencies]
+anyhow              = { workspace = true }
+json-strip-comments = { workspace = true }
+serde               = { workspace = true }
+serde_json          = { workspace = true }
+void                = { workspace = true }
+walkdir             = { workspace = true }
+which               = { workspace = true }
+zip                 = { workspace = true }

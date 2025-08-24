@@ -1,0 +1,36 @@
+{
+  "name": "@naql/monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check:write": "biome check --write --unsafe",
+    "check": "biome check",
+    "postinstall": "husky",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable",
+    "version": "changeset version && pnpm i --lockfile-only"
+  },
+  "license": "MIT OR Apache-2.0",
+  "packageManager": "yarn@4.9.3",
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.2",
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.6",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@types/node": "^24.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.2",
+    "pinst": "^3.0.0",
+    "typescript": "^5.9.2"
+  },
+  "dependenciesMeta": {
+    "@commitlint/cli@19.8.1": {
+      "unplugged": true
+    },
+    "@commitlint/config-conventional@19.8.1": {
+      "unplugged": true
+    }
+  }
+}

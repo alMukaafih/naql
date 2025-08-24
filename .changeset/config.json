@@ -1,0 +1,23 @@
+{
+  "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
+  "changelog": ["@changesets/changelog-github", { "repo": "alMukaafih/naql" }],
+  "commit": false,
+  "fixed": [
+    [
+      "@naql/cli",
+      "@naql/cli-win32-x64",
+      "@naql/cli-win32-arm64",
+      "@naql/cli-darwin-x64",
+      "@naql/cli-darwin-arm64",
+      "@naql/cli-linux-x64",
+      "@naql/cli-linux-arm64",
+      "@naql/cli-linux-x64-musl",
+      "@naql/cli-linux-arm64-musl"
+    ]
+  ],
+  "linked": [],
+  "access": "public",
+  "baseBranch": "main",
+  "updateInternalDependencies": "patch",
+  "ignore": []
+}

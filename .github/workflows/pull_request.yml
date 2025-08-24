@@ -1,0 +1,52 @@
+# Jobs run on pull request
+name: Pull request
+on:
+  pull_request:
+    branches:
+      - main
+    paths: # Only run when changes are made to rust code or root Cargo
+      - "crates/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+
+# Cancel jobs when the PR is updated
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+env:
+  RUST_LOG: info
+  RUST_BACKTRACE: 1
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  lint:
+    name: Lint project
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout PR Branch
+        uses: actions/checkout@v5
+
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+
+      - name: Run clippy
+        run: cargo lint
+
+  check-dependencies:
+    name: Check Dependencies
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout PR Branch
+        uses: actions/checkout@v5
+
+      - name: Install toolchain
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Install cargo-udeps
+        run: cargo +nightly install cargo-udeps
+
+      - name: Detect unused dependencies using udeps
+        run: cargo +nightly udeps --all-targets

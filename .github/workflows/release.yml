@@ -1,0 +1,220 @@
+name: Release
+
+env:
+  CARGO_TERM_COLOR: always
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  MACOSX_DEPLOYMENT_TARGET: "10.13"
+
+permissions:
+  contents: write
+  id-token: write
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  changesets:
+    name: Release
+    outputs:
+      hasChangesets: ${{ steps.changesets-action.outputs.hasChangesets }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Create Release Pull Request
+        id: changesets-action
+        uses: changesets/action@v1
+        with:
+          version: yarn run version
+          commit: "ci: release"
+          title: "ci: release"
+  version:
+    runs-on: ubuntu-24.04
+    needs: changesets
+    if: needs.changesets.outputs.hasChangesets == 'false'
+    outputs:
+      cli-version: ${{ steps.cli-version-changed.outputs.version }}
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check CLI version changes
+        id: cli-version-changed
+        run: |
+          version=$(node --experimental-strip-types scripts/version-check.ts packages/@naql/cli/package.json)
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+  build-binaries:
+    needs: version
+    if: needs.version.outputs.cli-version
+    strategy:
+      fail-fast: false
+      matrix:
+        settings:
+          # windows
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            code-target: win32-x64
+          - os: windows-latest
+            code-target: win32-arm64
+            target: aarch64-pc-windows-msvc
+          - os: windows-latest
+            code-target: win32-ia32
+            target: i686-pc-windows-msvc
+
+          # darwin
+          - os: macos-latest
+            code-target: darwin-x64
+            target: x86_64-apple-darwin
+          - os: macos-latest
+            code-target: darwin-arm64
+            target: aarch64-apple-darwin
+
+          # gnu
+          - os: ubuntu-latest
+            code-target: linux-x64
+            target: x86_64-unknown-linux-gnu
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
+          - os: ubuntu-latest
+            code-target: linux-arm64
+            target: aarch64-unknown-linux-gnu
+            docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
+          - os: ubuntu-latest
+            code-target: linux-arm
+            target: armv7-unknown-linux-gnueabihf
+            setup: sudo apt-get update && sudo apt-get install gcc-arm-linux-gnueabihf -y
+
+          # android
+          - os: ubuntu-latest
+            code-target: android-x64
+            target: x86_64-linux-android
+          - os: ubuntu-latest
+            code-target: android-arm64
+            target: aarch64-linux-android
+          - os: ubuntu-latest
+            code-target: android-arm
+            target: armv7-linux-androideabi
+
+    name: Package ${{ matrix.settings.target }}
+    runs-on: ${{ matrix.settings.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        if: ${{ !matrix.settings.docker }}
+        with:
+          toolchain: stable
+          targets: ${{ matrix.settings.target }}
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            .cargo-cache
+            target/
+          key: ${{ matrix.settings.target }}-cargo-${{ matrix.settings.os }}
+
+      - name: Setup Zig
+        uses: goto-bus-stop/setup-zig@v2
+
+        if: ${{ matrix.settings.target == 'armv7-unknown-linux-gnueabihf' }}
+        with:
+          version: 0.13.0
+
+      - name: Build in docker
+        uses: addnab/docker-run-action@v3
+        if: ${{ matrix.settings.docker }}
+        with:
+          image: ${{ matrix.settings.docker }}
+          options: "--user 0:0 -v ${{ github.workspace }}/.cargo-cache/git/db:/usr/local/cargo/git/db -v ${{ github.workspace }}/.cargo/registry/cache:/usr/local/cargo/registry/cache -v ${{ github.workspace }}/.cargo/registry/index:/usr/local/cargo/registry/index -v ${{ github.workspace }}:/build -w /build"
+          run: |
+            $NAQL_VERSION=${{ needs.version.outputs.cli-version }}
+            cargo build -p naql-cli --release --target ${{ matrix.settings.target }}
+
+      - name: Build binary
+        if: ${{ !matrix.settings.docker && matrix.settings.build }}
+        run: ${{ matrix.settings.build }}
+        shell: bash
+        env:
+          NAQL_VERSION: ${{ needs.version.outputs.cli-version }}
+      - name: Build binary
+        if: ${{ !matrix.settings.docker && !matrix.settings.build }}
+        run: cargo build -p naql-cli --release --target ${{ matrix.settings.target }}
+        shell: bash
+        env:
+          NAQL_VERSION: ${{ needs.version.outputs.cli-version }}
+
+      - name: Copy CLI binary
+        if: ${{matrix.settings.os == 'windows-latest'}}
+        run: |
+          mkdir dist
+          cp target/${{ matrix.settings.target }}/release/naql.exe ./dist/naql-${{ matrix.settings.code-target }}.exe
+      - name: Copy CLI binary
+        if: ${{matrix.settings.os != 'windows-latest'}}
+        run: |
+          mkdir dist
+          cp target/${{ matrix.settings.target }}/release/naql ./dist/naql-${{ matrix.settings.code-target }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cli-${{ matrix.settings.target }}
+          path: ./dist/naql-*
+          if-no-files-found:
+
+  publish-cli:
+    name: Publish CLI
+    runs-on: ubuntu-24.04
+    needs:
+      - build-binaries
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: yarn
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: Move artifacts
+        run: yarn artifacts
+
+      - name: Publish npm packages as latest
+        run: |
+          yarn config set npmAuthToken $NPM_TOKEN
+          for package in packages/@naql/*; do  yarn npm publish --tag latest --access public --provenance; done
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
