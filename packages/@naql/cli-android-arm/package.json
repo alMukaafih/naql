@@ -1,0 +1,4 @@
+{
+  "name": "@naql/cli-android-arm",
+  "packageManager": "yarn@4.9.3"
+}

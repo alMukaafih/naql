@@ -5,6 +5,16 @@ __metadata:
   version: 8
   cacheKey: 10c0
 
+"@acode-app/types@npm:^1.11.2":
+  version: 1.11.2
+  resolution: "@acode-app/types@npm:1.11.2"
+  dependencies:
+    "@types/node": "npm:^22.15.29"
+    html-tag-js: "npm:^1.8.1"
+  checksum: 10c0/696d54b0d68d6d3be463854a645d5bfd7b89690edb43ccc75741eaa1d58d8147ba1319321c84a7a0cc657dfb19786bd1947c641e403dacef1c574e98caf0b4cd
+  languageName: node
+  linkType: hard
+
 "@babel/code-frame@npm:^7.0.0":
   version: 7.27.1
   resolution: "@babel/code-frame@npm:7.27.1"
@@ -608,6 +618,80 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@naql/cli-android-arm64@workspace:packages/@naql/cli-android-arm64":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli-android-arm64@workspace:packages/@naql/cli-android-arm64"
+  languageName: unknown
+  linkType: soft
+
+"@naql/cli-android-arm@workspace:packages/@naql/cli-android-arm":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli-android-arm@workspace:packages/@naql/cli-android-arm"
+  languageName: unknown
+  linkType: soft
+
+"@naql/cli-android-x4@workspace:packages/@naql/cli-android-x4":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli-android-x4@workspace:packages/@naql/cli-android-x4"
+  languageName: unknown
+  linkType: soft
+
+"@naql/cli-darwin-arm64@workspace:packages/@naql/cli-darwin-arm64":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli-darwin-arm64@workspace:packages/@naql/cli-darwin-arm64"
+  languageName: unknown
+  linkType: soft
+
+"@naql/cli-darwin-x64@workspace:packages/@naql/cli-darwin-x64":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli-darwin-x64@workspace:packages/@naql/cli-darwin-x64"
+  languageName: unknown
+  linkType: soft
+
+"@naql/cli-linux-arm64@workspace:packages/@naql/cli-linux-arm64":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli-linux-arm64@workspace:packages/@naql/cli-linux-arm64"
+  languageName: unknown
+  linkType: soft
+
+"@naql/cli-linux-arm@workspace:packages/@naql/cli-linux-arm":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli-linux-arm@workspace:packages/@naql/cli-linux-arm"
+  languageName: unknown
+  linkType: soft
+
+"@naql/cli-linux-x64@workspace:packages/@naql/cli-linux-x64":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli-linux-x64@workspace:packages/@naql/cli-linux-x64"
+  languageName: unknown
+  linkType: soft
+
+"@naql/cli-win32-arm64@workspace:packages/@naql/cli-win32-arm64":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli-win32-arm64@workspace:packages/@naql/cli-win32-arm64"
+  languageName: unknown
+  linkType: soft
+
+"@naql/cli-win32-ia32@workspace:packages/@naql/cli-win32-ia32":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli-win32-ia32@workspace:packages/@naql/cli-win32-ia32"
+  languageName: unknown
+  linkType: soft
+
+"@naql/cli-win32-x64@workspace:packages/@naql/cli-win32-x64":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli-win32-x64@workspace:packages/@naql/cli-win32-x64"
+  languageName: unknown
+  linkType: soft
+
+"@naql/cli@workspace:packages/@naql/cli":
+  version: 0.0.0-use.local
+  resolution: "@naql/cli@workspace:packages/@naql/cli"
+  bin:
+    naql: bin/naql
+  languageName: unknown
+  linkType: soft
+
 "@naql/monorepo@workspace:.":
   version: 0.0.0-use.local
   resolution: "@naql/monorepo@workspace:."
@@ -623,6 +707,8 @@ __metadata:
     pinst: "npm:^3.0.0"
     typescript: "npm:^5.9.2"
   dependenciesMeta:
+    "@biomejs/biome@2.2.2":
+      unplugged: true
     "@commitlint/cli@19.8.1":
       unplugged: true
     "@commitlint/config-conventional@19.8.1":
@@ -679,6 +765,15 @@ __metadata:
   version: 12.20.55
   resolution: "@types/node@npm:12.20.55"
   checksum: 10c0/3b190bb0410047d489c49bbaab592d2e6630de6a50f00ba3d7d513d59401d279972a8f5a598b5bb8ddc1702f8a2f4ec57a65d93852f9c329639738e7053637d1
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^22.15.29":
+  version: 22.17.2
+  resolution: "@types/node@npm:22.17.2"
+  dependencies:
+    undici-types: "npm:~6.21.0"
+  checksum: 10c0/23cd13aa35da6322a6d66cf4b3a45dbd40764ba726ab8681960270156c3abba776dd8dc173250c467f708d40612ecd725755d7659b775b513904680d5205eaff
   languageName: node
   linkType: hard
 
@@ -1258,6 +1353,13 @@ __metadata:
   version: 4.2.11
   resolution: "graceful-fs@npm:4.2.11"
   checksum: 10c0/386d011a553e02bc594ac2ca0bd6d9e4c22d7fa8cfbfc448a6d148c59ea881b092db9dbe3547ae4b88e55f1b01f7c4a2ecc53b310c042793e63aa44cf6c257f2
+  languageName: node
+  linkType: hard
+
+"html-tag-js@npm:^1.8.1":
+  version: 1.9.2
+  resolution: "html-tag-js@npm:1.9.2"
+  checksum: 10c0/d17098ed903099f76698608e0e4aecfbda2f135b65355087a1a2d495b1ddff37133ce71d363b517a0887215710839ce395e86db3cfbebf3ccea288eecf7727e4
   languageName: node
   linkType: hard
 
@@ -1966,6 +2068,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"runtime@workspace:packages/runtime":
+  version: 0.0.0-use.local
+  resolution: "runtime@workspace:packages/runtime"
+  dependencies:
+    "@acode-app/types": "npm:^1.11.2"
+    typescript: "npm:^5.9.2"
+  languageName: unknown
+  linkType: soft
+
 "safer-buffer@npm:>= 2.1.2 < 3.0.0":
   version: 2.1.2
   resolution: "safer-buffer@npm:2.1.2"
@@ -2171,6 +2282,13 @@ __metadata:
     tsc: bin/tsc
     tsserver: bin/tsserver
   checksum: 10c0/34d2a8e23eb8e0d1875072064d5e1d9c102e0bdce56a10a25c0b917b8aa9001a9cf5c225df12497e99da107dc379360bc138163c66b55b95f5b105b50578067e
+  languageName: node
+  linkType: hard
+
+"undici-types@npm:~6.21.0":
+  version: 6.21.0
+  resolution: "undici-types@npm:6.21.0"
+  checksum: 10c0/c01ed51829b10aa72fc3ce64b747f8e74ae9b60eafa19a7b46ef624403508a54c526ffab06a14a26b3120d055e1104d7abe7c9017e83ced038ea5cf52f8d5e04
   languageName: node
   linkType: hard
 

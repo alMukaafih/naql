@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": true,
+    "removeComments": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false,
+    "strict": false,
+    "outDir": "./dist",
+    "rootDir": "src",
+    "composite": true,
+    "skipLibCheck": true,
+    "types": [
+      "@acode-app/types"
+    ]
+  },
+  "include": [
+    "./src"
+  ]
+}

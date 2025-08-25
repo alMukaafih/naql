@@ -4,13 +4,18 @@ name    = "naql-build"
 version = "0.1.0"
 
 [dependencies]
-anyhow      = { workspace = true }
-cached      = { workspace = true }
-clap        = { workspace = true }
-naql-shared = { workspace = true }
-radix_fmt   = { workspace = true }
-rayon       = { workspace = true }
-serde       = { workspace = true }
-serde_json  = { workspace = true }
-tempfile    = { workspace = true }
-tracing     = { workspace = true }
+anyhow          = { workspace = true }
+cached          = { workspace = true }
+clap            = { workspace = true }
+minijinja       = { workspace = true }
+minijinja-embed = { workspace = true }
+naql-shared     = { workspace = true }
+radix_fmt       = { workspace = true }
+rayon           = { workspace = true }
+serde           = { workspace = true }
+serde_json      = { workspace = true }
+tempfile        = { workspace = true }
+tracing         = { workspace = true }
+
+[build-dependencies]
+minijinja-embed = { workspace = true }

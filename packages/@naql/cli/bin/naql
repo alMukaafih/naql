@@ -1,0 +1,54 @@
+#!/usr/bin/env node
+const { platform, arch, env } = process;
+
+const PLATFORMS = {
+	android: {
+		x64: "@naql/cli-android-x64/naql",
+		arm64: "@naql/cli-android-arm64/naql",
+		arm: "@naql/cli-android-arm/naql",
+	},
+	darwin: {
+		x64: "@naql/cli-darwin-x64/naql",
+		arm64: "@naql/cli-darwin-arm64/naql",
+	},
+	linux: {
+		x64: "@naql/cli-linux-x64/naql",
+		arm64: "@naql/cli-linux-arm64/naql",
+		arm: "@naql/cli-linux-arm/naql",
+	},
+	win32: {
+		x64: "@naql/cli-win32-x64/naql.exe",
+		arm64: "@naql/cli-win32-arm64/naql.exe",
+		ia32: "@naql/cli-win32-ia32/naql.exe",
+	},
+};
+
+const binPath = PLATFORMS?.[platform]?.[arch];
+
+if (binPath) {
+	const result = require("node:child_process").spawnSync(
+		require.resolve(binPath),
+		process.argv.slice(2),
+		{
+			shell: false,
+			stdio: "inherit",
+			env: {
+				...env,
+			},
+		},
+	);
+
+	if (result.error) {
+		throw result.error;
+	}
+
+	// @ts-expect-error
+	process.exitCode = result.status;
+} else {
+	console.error(
+		"The Naql CLI package doesn't ship with prebuilt binaries for your platform yet. " +
+			"You can still use the CLI by cloning the alMukaafih/naql repo from GitHub, " +
+			"and follow the instructions there to build the CLI for your platform.",
+	);
+	process.exitCode = 1;
+}

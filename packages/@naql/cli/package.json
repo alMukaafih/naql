@@ -1,0 +1,29 @@
+{
+  "name": "@naql/cli",
+  "version": "0.0.0",
+  "bin": {
+    "naql": "bin/naql"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alMukaafih/naql.git",
+    "directory": "packages/@naql/cli"
+  },
+  "license": "MIT OR Apache-2.0",
+  "author": {
+    "name": "Mubarak Aloaye Umoru"
+  },
+  "bugs": "https://github.com/alMukaafih/naql/issues",
+  "files": [
+    "bin/naql",
+    "configuration_schema.json",
+    "README.md",
+    "LICENSE-APACHE",
+    "LICENSE-MIT"
+  ],
+  "keywords": [
+    "acode",
+    "vscode"
+  ],
+  "packageManager": "yarn@4.9.3"
+}

@@ -13,6 +13,10 @@
   },
   "license": "MIT OR Apache-2.0",
   "packageManager": "yarn@4.9.3",
+  "workspaces": [
+    "packages/runtime",
+    "packages/@naql/*"
+  ],
   "devDependencies": {
     "@biomejs/biome": "^2.2.2",
     "@changesets/changelog-github": "^0.5.1",
@@ -26,6 +30,9 @@
     "typescript": "^5.9.2"
   },
   "dependenciesMeta": {
+    "@biomejs/biome@2.2.2": {
+      "unplugged": true
+    },
     "@commitlint/cli@19.8.1": {
       "unplugged": true
     },
