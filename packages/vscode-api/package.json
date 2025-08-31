@@ -1,0 +1,26 @@
+{
+  "name": "acode-vscode-api",
+  "packageManager": "yarn@4.9.2",
+  "type": "module",
+  "types": "out/src/vs",
+  "private": true,
+  "scripts": {
+    "dev": "rsbuild dev",
+    "build": "rsbuild build",
+    "format": "biome format --write",
+    "lint": "biome lint --write"
+  },
+  "devDependencies": {
+    "@acode-app/types": "cm",
+    "@biomejs/biome": "^2.2.2",
+    "@rsbuild/core": "^1.5.0",
+    "@types/adm-zip": "^0.5.7",
+    "@types/vscode": "^1.103.0",
+    "adm-zip": "^0.5.16",
+    "fflate": "^0.8.2",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "safe-toml": "^0.1.0"
+  }
+}
