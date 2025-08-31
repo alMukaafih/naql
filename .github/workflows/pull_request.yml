@@ -33,7 +33,7 @@ jobs:
           components: clippy
 
       - name: Run clippy
-        run: cargo lint
+        run: cargo clippy
 
   check-dependencies:
     name: Check Dependencies
