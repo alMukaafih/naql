@@ -13,16 +13,16 @@ use std::sync::{Arc, Mutex};
 pub struct IconThemeParser {
     id: String,
     src: PathBuf,
-    dest: PathBuf,
+    build: PathBuf,
     manifest: IconThemeManifest,
 }
 
 impl IconThemeParser {
-    pub fn new(id: String, src: PathBuf, dest: PathBuf, manifest: IconThemeManifest) -> Self {
+    pub fn new(id: String, src: PathBuf, build: PathBuf, manifest: IconThemeManifest) -> Self {
         Self {
             id,
             src,
-            dest,
+            build,
             manifest,
         }
     }
@@ -50,7 +50,8 @@ impl Parser for IconThemeParser {
         ensure!(root_folder);
         ensure!(root_folder_expanded);
 
-        let mut style_sheet = StyleSheet::new(self.src.clone(), join!(&self.dest, "assets"));
+        let mut style_sheet =
+            StyleSheet::new(self.src.clone(), join!(&self.build, "dist", "assets"));
 
         macro_rules! get_or {
             ( $f:tt, $or:expr ) => {{
@@ -176,7 +177,7 @@ impl Parser for IconThemeParser {
                     let path = bundle(
                         icon_path.clone(),
                         self.src.clone(),
-                        join!(&self.dest, "assets"),
+                        join!(&self.build, "dist", "assets"),
                     )?;
 
                     definition.icon_path = Some(path);
@@ -195,7 +196,7 @@ impl Parser for IconThemeParser {
                         let path = bundle(
                             src.path.clone(),
                             self.src.clone(),
-                            join!(&self.dest, "assets"),
+                            join!(&self.build, "dist", "assets"),
                         )?;
                         src.path = path;
                     }
@@ -212,14 +213,22 @@ impl Parser for IconThemeParser {
             style_sheet.to_string()
         };
 
-        let mut f = BufWriter::new(File::create(join!(&self.dest, format!("{}.css", self.id)))?);
+        let mut f = BufWriter::new(File::create(join!(
+            &self.build,
+            "dist",
+            "assets",
+            format!("{}.iconTheme.css", self.id)
+        ))?);
 
         f.write(s.as_bytes())?;
 
         self.manifest.icon_definitions = definitions;
-        self.manifest
-            .icon_definitions
-            .write_to_file(join!(&self.dest, format!("{}.json", self.id)))?;
+        self.manifest.icon_definitions.write_to_file(join!(
+            &self.build,
+            "src",
+            "iconThemes",
+            format!("{}.json", self.id)
+        ))?;
 
         Ok(())
     }

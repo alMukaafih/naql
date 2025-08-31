@@ -1,1 +1,1 @@
-# naql
+# Naql - .vsix porting made easy

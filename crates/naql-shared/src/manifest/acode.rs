@@ -1,7 +1,10 @@
 use super::vscode::VsCodeManifest;
-use crate::{own, path};
+use crate::{join, ok, own, path, traits::WriteToFile};
 use serde::{Deserialize, Serialize};
-use std::path::PathBuf;
+use std::{
+    fs::copy,
+    path::{Path, PathBuf},
+};
 
 /// Plugin.json is a manifest file that contains information about the plugin,
 /// such as name, description, author, etc. It is required for every plugin.
@@ -66,7 +69,7 @@ impl AcodeManifest {
 
         merge!(id);
         merge!(name);
-        merge!(main);
+        // merge!(main); ignore main
         merge!(version);
         merge!(readme);
         merge!(icon);
@@ -75,6 +78,29 @@ impl AcodeManifest {
         merge!(author);
         merge!(files, vec![]);
         merge!(dependencies, vec![]);
+    }
+
+    pub fn resolve<P: AsRef<Path>>(&mut self, path: P) {
+        if let Some(readme) = &self.readme {
+            self.readme = Some(join!(&path, readme))
+        }
+
+        if let Some(icon) = &self.icon {
+            self.icon = Some(join!(&path, icon))
+        }
+    }
+
+    pub fn bundle<P: AsRef<Path>>(&mut self, dest: P) -> anyhow::Result<()> {
+        let readme = PathBuf::from("readme.md");
+        let icon = PathBuf::from("icon.png");
+
+        copy(ok!(self.readme.as_ref()), join!(&dest, &readme))?;
+        copy(ok!(self.icon.as_ref()), join!(&dest, &icon))?;
+
+        self.readme = Some(readme);
+        self.icon = Some(icon);
+
+        self.write_to_file(join!(dest, "plugin.json"))
     }
 }
 
@@ -85,8 +111,8 @@ impl From<VsCodeManifest> for AcodeManifest {
             name: Some(manifest.display_name),
             main: Some(own!("main.js")),
             version: Some(manifest.version),
-            readme: Some(path!("readme.md")),
-            icon: Some(path!("icon.png")),
+            readme: Some(path!("README.md")),
+            icon: Some(manifest.icon),
             files: None,
             price: None,
             min_version_code: Some(955),

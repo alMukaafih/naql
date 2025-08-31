@@ -1,7 +1,9 @@
 use crate::{ok, own};
 use anyhow::Result;
+use size::{Base, Size, Style};
 use std::fs::{self, File};
 use std::io::{self, Read, Write};
+use std::os::unix::fs::MetadataExt;
 use std::path::Path;
 use walkdir::WalkDir;
 use zip::write::SimpleFileOptions;
@@ -45,7 +47,7 @@ pub fn unzip<P1: AsRef<Path>, P2: AsRef<Path>>(src: P1, dest: P2) -> Result<()> 
     Ok(())
 }
 
-pub fn zip<P1: AsRef<Path>, P2: AsRef<Path>>(src: P1, dest: P2) -> Result<()> {
+pub fn zip<P1: AsRef<Path>, P2: AsRef<Path>>(src: P1, dest: P2) -> Result<String> {
     let file = File::create(dest)?;
 
     let walkdir = WalkDir::new(&src);
@@ -79,6 +81,12 @@ pub fn zip<P1: AsRef<Path>, P2: AsRef<Path>>(src: P1, dest: P2) -> Result<()> {
         }
     }
 
-    zip.finish()?;
-    Ok(())
+    let size = zip.finish()?.metadata()?.size();
+    let size = Size::from_bytes(size)
+        .format()
+        .with_base(Base::Base10)
+        .with_style(Style::AbbreviatedLowercase)
+        .to_string();
+
+    Ok(size)
 }

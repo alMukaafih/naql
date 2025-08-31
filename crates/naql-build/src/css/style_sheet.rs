@@ -1,6 +1,5 @@
 use super::StyleRule;
 use anyhow::{Result, bail};
-use cached::Cached;
 use cached::proc_macro::cached;
 use naql_shared::{join, ok};
 use radix_fmt::radix_36;
@@ -10,15 +9,14 @@ use std::ffi::OsStr;
 use std::fmt::Display;
 use std::fs::copy;
 use std::path::PathBuf;
+use std::sync::Mutex;
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::{Arc, Mutex};
-use tracing::{debug, error};
+use tracing::debug;
 
 pub struct StyleSheet {
     rules: HashMap<String, Mutex<StyleRule>>,
     src: PathBuf,
     dest: PathBuf,
-    count: Arc<AtomicUsize>,
 }
 
 impl StyleSheet {
@@ -27,7 +25,6 @@ impl StyleSheet {
             rules: HashMap::with_capacity(1024),
             src,
             dest,
-            count: Arc::new(AtomicUsize::new(0)),
         }
     }
 
@@ -90,7 +87,7 @@ pub fn bundle(path: PathBuf, src: PathBuf, dest: PathBuf) -> Result<PathBuf> {
     let src = match src.canonicalize() {
         Ok(v) => v,
         Err(_) => {
-            error!(
+            debug!(
                 "cp: cannot stat '{}': No such file or directory",
                 src.to_string_lossy()
             );
@@ -109,9 +106,4 @@ pub fn bundle(path: PathBuf, src: PathBuf, dest: PathBuf) -> Result<PathBuf> {
     debug!("cp {} {}", src.to_string_lossy(), d.to_string_lossy());
     let _ = copy(src, d);
     Ok(path)
-}
-
-pub fn clear_bundle_cache() {
-    ok!(BUNDLE.lock()).cache_clear();
-    COUNT.store(0, Ordering::Relaxed);
 }

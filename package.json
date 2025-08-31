@@ -15,6 +15,7 @@
   "packageManager": "yarn@4.9.3",
   "workspaces": [
     "packages/runtime",
+    "packages/vscode-api",
     "packages/@naql/*"
   ],
   "devDependencies": {
@@ -28,16 +29,5 @@
     "lint-staged": "^16.1.2",
     "pinst": "^3.0.0",
     "typescript": "^5.9.2"
-  },
-  "dependenciesMeta": {
-    "@biomejs/biome@2.2.2": {
-      "unplugged": true
-    },
-    "@commitlint/cli@19.8.1": {
-      "unplugged": true
-    },
-    "@commitlint/config-conventional@19.8.1": {
-      "unplugged": true
-    }
   }
 }

@@ -25,5 +25,8 @@
     "acode",
     "vscode"
   ],
-  "packageManager": "yarn@4.9.3"
+  "packageManager": "yarn@4.9.3",
+  "devDependencies": {
+    "esbuild": "^0.25.9"
+  }
 }

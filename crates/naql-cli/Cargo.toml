@@ -3,6 +3,10 @@ edition = "2024"
 name    = "naql-cli"
 version = "0.1.0"
 
+[[bin]]
+name = "naql"
+path = "src/main.rs"
+
 [dependencies]
 anyhow             = { workspace = true }
 clap               = { workspace = true }

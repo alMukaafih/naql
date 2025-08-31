@@ -598,8 +598,10 @@ dependencies = [
  "rayon",
  "serde",
  "serde_json",
+ "size",
  "tempfile",
  "tracing",
+ "ziyy",
 ]
 
 [[package]]
@@ -622,6 +624,7 @@ dependencies = [
  "json-strip-comments",
  "serde",
  "serde_json",
+ "size",
  "void",
  "walkdir",
  "which",
@@ -882,6 +885,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d66dc143e6b11c1eddc06d5c423cfc97062865baf299914ab64caa38182078fe"
 
 [[package]]
+name = "size"
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1b6709c7b6754dca1311b3c73e79fcce40dd414c782c66d88e8823030093b02b"
+
+[[package]]
 name = "sled"
 version = "0.34.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -929,6 +938,16 @@ dependencies = [
  "fastrand",
  "getrandom 0.3.3",
  "once_cell",
+ "rustix",
+ "windows-sys",
+]
+
+[[package]]
+name = "terminal_size"
+version = "0.4.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "60b8cb979cb11c32ce1603f8137b22262a9d131aaa5c37b5678025f22b8becd0"
+dependencies = [
  "rustix",
  "windows-sys",
 ]
@@ -1314,6 +1333,25 @@ dependencies = [
  "memchr",
  "thiserror",
  "zopfli",
+]
+
+[[package]]
+name = "ziyy"
+version = "2.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fe6b2bb9f501bfffa306f832f005414df349746cf6923c48d7a86d14264e8033"
+dependencies = [
+ "terminal_size",
+ "ziyy-core",
+]
+
+[[package]]
+name = "ziyy-core"
+version = "0.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3e071653877ae44b48e23a70a2853fe2c088603b0e9ba937a3e5f0429fe06921"
+dependencies = [
+ "rayon",
 ]
 
 [[package]]

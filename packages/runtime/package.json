@@ -2,7 +2,7 @@
   "name": "runtime",
   "version": "0.0.0",
   "devDependencies": {
-    "@acode-app/types": "^1.11.2",
+    "@acode-app/types": "cm",
     "typescript": "^5.9.2"
   },
   "packageManager": "yarn@4.9.3"

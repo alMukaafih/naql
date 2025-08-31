@@ -1,18 +1,17 @@
 const Url = acode.require("url");
-
 const details = {{ details }};
 
 export default {
   init(firstInit, baseUrl) {
-    for (const {id, name, root} of details) {
+    for (const [id, name] of details) {
       window.vsApi.registerIconTheme(id, {
         name,
-        rootUrl: Url.join(baseUrl, root),
+        rootUrl: Url.join(baseUrl, "assets"),
         theme: async () => {
           return (await import(`./iconThemes/${id}.json`));
         },
         isMinimized: true,
-        cssUrl: Url.join(this.baseUrl, "assets", `${id}.css`),
+        cssUrl: Url.join(baseUrl, "assets", `${id}.css`),
       });
     }
 
@@ -27,7 +26,7 @@ export default {
 
   dispose() {
     for (const detail of details) {
-      window.vsApi.unRegisterIconTheme(detail.id);
+      window.vsApi.unRegisterIconTheme(detail[0]);
     }
   }
 };

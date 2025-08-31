@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use super::{font_rule::FontRule, style_rule::StyleRule};
 use std::fmt::Display;
 
